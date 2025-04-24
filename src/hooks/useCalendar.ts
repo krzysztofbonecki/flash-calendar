@@ -42,6 +42,8 @@ interface CalendarDayStateFields {
   isRangeValid: boolean;
   /** The color of the range */
   color?: string;
+  /** Is the day dimmed? */
+  isDimmed: boolean;
 }
 
 /**
@@ -152,6 +154,11 @@ export interface UseCalendarParams {
     startId?: string;
     endId?: string;
   }[];
+
+  /**
+   * The days to be dimmed.
+   */
+  dimmedDays?: string[];
 }
 
 type GetStateFields = Pick<
@@ -163,6 +170,7 @@ type GetStateFields = Pick<
   | "disabledDaysIndexes"
   | "disabled"
   | "restrictions"
+  | "dimmedDays"
 > & {
   todayId?: string;
   id: string;
@@ -183,6 +191,7 @@ export const getStateFields = ({
   disabledDaysIndexes,
   disabled,
   restrictions,
+  dimmedDays,
 }: GetStateFields): CalendarDayStateFields => {
   const activeRange = calendarActiveDateRanges?.find(({ startId, endId }) => {
     // Regular range
@@ -206,6 +215,8 @@ export const getStateFields = ({
     }
     return false;
   });
+
+  const isDimmed = dimmedDays?.includes(id) ?? false;
 
   const isRangeValid =
     activeRange?.startId !== undefined && activeRange.endId !== undefined;
@@ -236,6 +247,7 @@ export const getStateFields = ({
     isDisabled,
     isToday,
     color: activeRange?.color,
+    isDimmed,
   };
 };
 

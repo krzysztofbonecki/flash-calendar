@@ -27,6 +27,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     const { result } = renderHook(() => useOptimizedDayMetadata(baseMetadata));
@@ -52,6 +53,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     const { result, rerender } = renderHook(
@@ -93,6 +95,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     // Initial state
@@ -142,6 +145,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     // Initial state
@@ -191,6 +195,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     // Initial state
@@ -241,6 +246,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     // Initial state
@@ -333,6 +339,7 @@ describe("useOptimizedDayMetadata", () => {
       isToday: false,
       isWeekend: false,
       state: "idle",
+      isDimmed: false,
     };
 
     // Initial state
@@ -400,6 +407,7 @@ describe("useOptimizedDayMetadata with calendarInstanceId", () => {
     isToday: false,
     isWeekend: false,
     state: "idle",
+    isDimmed: false,
   });
 
   it("uses the default instance ID when not provided", () => {

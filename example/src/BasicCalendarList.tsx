@@ -6,10 +6,11 @@ export const BasicCalendarList = () => {
   return (
     <Calendar.List
       calendarActiveDateRanges={[
-        { startId: "2025-04-24", endId: "2025-04-25" },
+        { startId: "2025-04-24", endId: "2025-04-25", color: "red" },
       ]}
       onCalendarDayPress={() => {}}
-      restrictions={[{ endId: undefined, startId: "2025-04-26" }]}
+      dimmedDays={["2025-04-26", "2025-04-27"]}
+      restrictions={[{ endId: undefined, startId: "2025-04-22" }]}
       theme={{
         itemDayContainer: {
           activeDayFiller: {
