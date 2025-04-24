@@ -216,7 +216,10 @@ export const getStateFields = ({
     return false;
   });
 
-  const isDimmed = dimmedDays?.includes(id) ?? false;
+  const isDimmed =
+    disabledDaysIndexes?.includes(date.getDay()) ??
+    dimmedDays?.includes(id) ??
+    false;
 
   const isRangeValid =
     activeRange?.startId !== undefined && activeRange.endId !== undefined;
@@ -224,7 +227,6 @@ export const getStateFields = ({
   const isDisabled = restrictions?.length
     ? !isRestricted
     : (disabled ||
-        disabledDaysIndexes?.includes(date.getDay()) ||
         calendarDisabledDateIds?.includes(id) ||
         (calendarMinDateId && id < calendarMinDateId) ||
         (calendarMaxDateId && id > calendarMaxDateId)) === true;

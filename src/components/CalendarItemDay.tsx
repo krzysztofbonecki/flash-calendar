@@ -54,9 +54,16 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
     ...styles.baseContent,
     color: theme.colors.content.primary,
   };
-
   return {
-    active: ({ color, isPressed, isHovered, isStartOfRange, isEndOfRange }) => {
+    active: ({
+      color,
+      isPressed,
+      isHovered,
+      isStartOfRange,
+      isEndOfRange,
+      isDisabled,
+      isDimmed,
+    }) => {
       const baseStyles: DayTheme & { container: ViewStyle } =
         isPressed || isHovered
           ? {
@@ -82,6 +89,11 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
             };
 
       baseStyles.container.borderRadius = 0;
+      baseStyles.content.opacity = isDisabled
+        ? 0.5
+        : isDimmed
+          ? 0.7
+          : undefined;
       if (isStartOfRange) {
         baseStyles.container.borderTopLeftRadius = 16;
         baseStyles.container.borderBottomLeftRadius = 16;
@@ -115,11 +127,11 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
             },
           }
         : {
-            container: {
-              ...styles.baseContainer,
+            container: styles.baseContainer,
+            content: {
+              ...baseContent,
               opacity: isDisabled ? 0.3 : isDimmed ? 0.5 : undefined,
             },
-            content: baseContent,
           };
     },
     today: ({ isPressed, isHovered, isDisabled, isDimmed }) => {
