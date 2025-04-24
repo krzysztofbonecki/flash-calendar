@@ -109,8 +109,8 @@ export interface CalendarProps extends UseCalendarParams {
    * When the calendar is disabled, you can add active ranges that will override the disabled state.
    */
   restrictions?: {
-    startId: string;
-    endId: string;
+    startId?: string;
+    endId?: string;
   }[];
 }
 
