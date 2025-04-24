@@ -44,6 +44,8 @@ type CalendarItemDayTheme = Record<
     isHovered?: boolean;
     isFocused?: boolean;
     color?: string;
+    isDisabled: boolean;
+    isDimmed: boolean;
   }) => DayTheme
 >;
 
@@ -97,9 +99,10 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
       container: styles.baseContainer,
       content: {
         ...baseContent,
+        opacity: 0.3,
       },
     }),
-    idle: ({ isPressed, isHovered }) => {
+    idle: ({ isPressed, isHovered, isDisabled, isDimmed }) => {
       return isPressed || isHovered
         ? {
             container: {
@@ -112,11 +115,14 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
             },
           }
         : {
-            container: styles.baseContainer,
+            container: {
+              ...styles.baseContainer,
+              opacity: isDisabled ? 0.3 : isDimmed ? 0.5 : undefined,
+            },
             content: baseContent,
           };
     },
-    today: ({ isPressed, isHovered }) => {
+    today: ({ isPressed, isHovered, isDisabled, isDimmed }) => {
       return isPressed || isHovered
         ? {
             container: {
@@ -131,6 +137,7 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
               borderColor: theme.colors.borders.default,
               borderStyle: "solid",
               borderWidth: 1,
+              opacity: isDisabled ? 0.3 : isDimmed ? 0.5 : undefined,
             },
             content: baseContent,
           };
@@ -201,6 +208,8 @@ export const CalendarItemDay = ({
           isEndOfRange: metadata.isEndOfRange ?? false,
           isStartOfRange: metadata.isStartOfRange ?? false,
           color: metadata.color,
+          isDisabled: metadata.isDisabled,
+          isDimmed: metadata.isDimmed,
         };
         const { container } = baseStyles[metadata.state](params);
         return {
@@ -219,6 +228,8 @@ export const CalendarItemDay = ({
           isEndOfRange: metadata.isEndOfRange ?? false,
           isStartOfRange: metadata.isStartOfRange ?? false,
           color: metadata.color,
+          isDisabled: metadata.isDisabled,
+          isDimmed: metadata.isDimmed,
         };
         const { content } = baseStyles[metadata.state](params);
         return (
@@ -271,16 +282,6 @@ export interface CalendarItemDayContainerProps {
   dayHeight: number;
   /** The color of the day */
   dayColor?: string;
-
-  /**
-   * Whether the day is dimmed.
-   */
-  isDimmed: boolean;
-
-  /**
-   * Whether the day is disabled.
-   */
-  isDisabled: boolean;
 }
 
 export const CalendarItemDayContainer = ({
@@ -291,8 +292,6 @@ export const CalendarItemDayContainer = ({
   daySpacing,
   dayHeight,
   dayColor,
-  isDimmed,
-  isDisabled,
 }: CalendarItemDayContainerProps) => {
   const baseTheme = useTheme();
   const spacerStyles = useMemo<ViewStyle>(() => {
@@ -302,16 +301,8 @@ export const CalendarItemDayContainer = ({
       flex: 1,
       height: dayHeight,
       ...theme?.spacer,
-      opacity: isDisabled ? 0.3 : isDimmed ? 0.5 : undefined,
     };
-  }, [
-    dayHeight,
-    daySpacing,
-    isDimmed,
-    isDisabled,
-    isStartOfWeek,
-    theme?.spacer,
-  ]);
+  }, [dayHeight, daySpacing, isStartOfWeek, theme?.spacer]);
 
   const activeDayFiller = useMemo<ViewStyle | null>(() => {
     if (!shouldShowActiveDayFiller) {
@@ -381,8 +372,6 @@ export const CalendarItemDayWithContainer = ({
       dayColor={metadata.color}
       dayHeight={dayHeight}
       daySpacing={daySpacing}
-      isDimmed={metadata.isDimmed}
-      isDisabled={metadata.isDisabled}
       isStartOfWeek={metadata.isStartOfWeek}
       shouldShowActiveDayFiller={
         metadata.isRangeValid && !metadata.isEndOfWeek
