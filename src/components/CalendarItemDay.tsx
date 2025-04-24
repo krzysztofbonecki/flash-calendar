@@ -97,6 +97,7 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
       container: styles.baseContainer,
       content: {
         ...baseContent,
+        opacity: 0.5,
         color: theme.colors.content.disabled,
       },
     }),

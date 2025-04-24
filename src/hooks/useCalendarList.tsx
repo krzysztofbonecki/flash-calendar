@@ -24,13 +24,8 @@ const buildMonthList = (
   endingMonth: Date,
   firstDayOfWeek: CalendarProps["calendarFirstDayOfWeek"] = "sunday"
 ): CalendarMonth[] => {
-  console.log("startingMonth", startingMonth);
-  console.log("endingMonth", endingMonth);
   const startingMonthId = toDateId(startingMonth);
   const endingMonthId = toDateId(endingMonth);
-
-  console.log("startingMonthId", startingMonthId);
-  console.log("endingMonthId", endingMonthId);
 
   if (endingMonthId < startingMonthId) {
     return [];
