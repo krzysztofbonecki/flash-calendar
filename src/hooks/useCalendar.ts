@@ -149,8 +149,8 @@ export interface UseCalendarParams {
    * When the calendar is disabled, you can restrict the days that can be selected.
    */
   restrictions?: {
-    startId: string;
-    endId: string;
+    startId?: string;
+    endId?: string;
   }[];
 }
 
@@ -197,7 +197,14 @@ export const getStateFields = ({
   });
 
   const isRestricted = restrictions?.some(({ startId, endId }) => {
-    return id >= startId && id <= endId;
+    if (startId && endId) {
+      return id >= startId && id <= endId;
+    } else if (startId) {
+      return id === startId;
+    } else if (endId) {
+      return id === endId;
+    }
+    return false;
   });
 
   const isRangeValid =
