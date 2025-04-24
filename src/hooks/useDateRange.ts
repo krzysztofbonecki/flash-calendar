@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
-import type { CalendarActiveDateRange } from "src/hooks/useCalendar";
-import type { CalendarOnDayPress } from "src/components";
+import type { CalendarOnDayPress } from "../components";
+
+import type { CalendarActiveDateRange } from "./useCalendar";
 
 /**
  * A convenience hook to simplify managing a date range in the calendar in a

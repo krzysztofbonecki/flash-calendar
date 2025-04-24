@@ -4,26 +4,26 @@ import type { ColorSchemeName } from "react-native";
 import type {
   CalendarItemDayContainerProps,
   CalendarItemDayProps,
-} from "src/components/CalendarItemDay";
+} from "../components/CalendarItemDay";
 import {
   CalendarItemDayContainer,
   CalendarItemDayWithContainer,
-} from "src/components/CalendarItemDay";
-import type { CalendarItemEmptyProps } from "src/components/CalendarItemEmpty";
-import { CalendarItemEmpty } from "src/components/CalendarItemEmpty";
-import type { CalendarItemWeekNameProps } from "src/components/CalendarItemWeekName";
-import { CalendarItemWeekName } from "src/components/CalendarItemWeekName";
-import type { CalendarRowMonthProps } from "src/components/CalendarRowMonth";
-import { CalendarRowMonth } from "src/components/CalendarRowMonth";
-import type { CalendarRowWeekProps } from "src/components/CalendarRowWeek";
-import { CalendarRowWeek } from "src/components/CalendarRowWeek";
-import { VStack } from "src/components/VStack";
-import { uppercaseFirstLetter } from "src/helpers/strings";
-import type { BaseTheme } from "src/helpers/tokens";
-import type { UseCalendarParams } from "src/hooks/useCalendar";
-import { useCalendar } from "src/hooks/useCalendar";
-import { activeDateRangesEmitter } from "src/hooks/useOptimizedDayMetadata";
-import { CalendarThemeProvider } from "src/components/CalendarThemeProvider";
+} from "../components/CalendarItemDay";
+import type { CalendarItemEmptyProps } from "../components/CalendarItemEmpty";
+import { CalendarItemEmpty } from "../components/CalendarItemEmpty";
+import type { CalendarItemWeekNameProps } from "../components/CalendarItemWeekName";
+import { CalendarItemWeekName } from "../components/CalendarItemWeekName";
+import type { CalendarRowMonthProps } from "../components/CalendarRowMonth";
+import { CalendarRowMonth } from "../components/CalendarRowMonth";
+import type { CalendarRowWeekProps } from "../components/CalendarRowWeek";
+import { CalendarRowWeek } from "../components/CalendarRowWeek";
+import { VStack } from "../components/VStack";
+import { uppercaseFirstLetter } from "../helpers/strings";
+import type { BaseTheme } from "../helpers/tokens";
+import type { UseCalendarParams } from "../hooks/useCalendar";
+import { useCalendar } from "../hooks/useCalendar";
+import { activeDateRangesEmitter } from "../hooks/useOptimizedDayMetadata";
+import { CalendarThemeProvider } from "../components/CalendarThemeProvider";
 
 export interface CalendarTheme {
   rowMonth?: CalendarRowMonthProps["theme"];

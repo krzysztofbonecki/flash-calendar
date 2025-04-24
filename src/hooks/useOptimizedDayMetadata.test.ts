@@ -1,12 +1,13 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import { describe, it, expect } from "bun:test";
 
-import { fromDateId } from "src/helpers/dates";
-import type { CalendarDayMetadata } from "src/hooks/useCalendar";
+import { fromDateId } from "../helpers/dates";
+
+import type { CalendarDayMetadata } from "./useCalendar";
 import {
   activeDateRangesEmitter,
   useOptimizedDayMetadata,
-} from "src/hooks/useOptimizedDayMetadata";
+} from "./useOptimizedDayMetadata";
 
 describe("useOptimizedDayMetadata", () => {
   it("return the base metadata as the initial value", () => {

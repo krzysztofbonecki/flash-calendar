@@ -3,10 +3,10 @@ import React, { useCallback, useMemo } from "react";
 import type { TextProps, TextStyle, ViewStyle } from "react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { BaseTheme } from "src/helpers/tokens";
-import type { CalendarDayMetadata } from "src/hooks/useCalendar";
-import { useOptimizedDayMetadata } from "src/hooks/useOptimizedDayMetadata";
-import { useTheme } from "src/hooks/useTheme";
+import type { BaseTheme } from "../helpers/tokens";
+import type { CalendarDayMetadata } from "../hooks/useCalendar";
+import { useOptimizedDayMetadata } from "../hooks/useOptimizedDayMetadata";
+import { useTheme } from "../hooks/useTheme";
 
 // react-native-web/overrides.ts
 declare module "react-native" {

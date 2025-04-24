@@ -3,8 +3,8 @@ import React, { useMemo } from "react";
 import type { TextProps, TextStyle, ViewStyle } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
-import { lightTheme } from "src/helpers/tokens";
-import { useTheme } from "src/hooks/useTheme";
+import { lightTheme } from "../helpers/tokens";
+import { useTheme } from "../hooks/useTheme";
 
 const styles = StyleSheet.create({
   container: {

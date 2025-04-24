@@ -1,16 +1,16 @@
-import { CalendarItemEmpty } from "src/components/CalendarItemEmpty";
-import { CalendarItemWeekName } from "src/components/CalendarItemWeekName";
-import { CalendarList } from "src/components/CalendarList";
-import { CalendarRowMonth } from "src/components/CalendarRowMonth";
-import { CalendarRowWeek } from "src/components/CalendarRowWeek";
-import { HStack } from "src/components/HStack";
-import { VStack } from "src/components/VStack";
+import { CalendarItemEmpty } from "../components/CalendarItemEmpty";
+import { CalendarItemWeekName } from "../components/CalendarItemWeekName";
+import { CalendarList } from "../components/CalendarList";
+import { CalendarRowMonth } from "../components/CalendarRowMonth";
+import { CalendarRowWeek } from "../components/CalendarRowWeek";
+import { HStack } from "../components/HStack";
+import { VStack } from "../components/VStack";
 import {
   CalendarItemDay,
   CalendarItemDayContainer,
   CalendarItemDayWithContainer,
-} from "src/components/CalendarItemDay";
-import { Calendar as CalendarDefault } from "src/components/Calendar";
+} from "../components/CalendarItemDay";
+import { Calendar as CalendarDefault } from "../components/Calendar";
 
 /**
  * This file houses the public API for the flash-calendar package.
@@ -30,7 +30,7 @@ export type {
   CalendarItemDayContainerProps,
   CalendarItemDayProps,
   CalendarItemDayWithContainerProps,
-} from "src/components/CalendarItemDay";
+} from "../components/CalendarItemDay";
 
 interface CalendarItemNamespace {
   /**
@@ -52,10 +52,10 @@ const CalendarItemWithNamespace = {} as CalendarItemNamespace;
 CalendarItemWithNamespace.Day = CalendarItemDayWithNamespace;
 
 CalendarItemWithNamespace.WeekName = CalendarItemWeekName;
-export type { CalendarItemWeekNameProps } from "src/components/CalendarItemWeekName";
+export type { CalendarItemWeekNameProps } from "../components/CalendarItemWeekName";
 
 CalendarItemWithNamespace.Empty = CalendarItemEmpty;
-export type { CalendarItemEmptyProps } from "src/components/CalendarItemEmpty";
+export type { CalendarItemEmptyProps } from "../components/CalendarItemEmpty";
 
 interface CalendarRowNamespace {
   /**
@@ -70,10 +70,10 @@ interface CalendarRowNamespace {
 
 const CalendarRowWithNamespace = {} as CalendarRowNamespace;
 CalendarRowWithNamespace.Month = CalendarRowMonth;
-export type { CalendarRowMonthProps } from "src/components/CalendarRowMonth";
+export type { CalendarRowMonthProps } from "../components/CalendarRowMonth";
 
 CalendarRowWithNamespace.Week = CalendarRowWeek;
-export type { CalendarRowWeekProps } from "src/components/CalendarRowWeek";
+export type { CalendarRowWeekProps } from "../components/CalendarRowWeek";
 
 type CalendarNamespace = {
   Item: typeof CalendarItemWithNamespace;
@@ -86,7 +86,7 @@ export type {
   CalendarOnDayPress,
   CalendarProps,
   CalendarTheme,
-} from "src/components/Calendar";
+} from "../components/Calendar";
 
 const CalendarWithNamespace = CalendarDefault as CalendarNamespace;
 CalendarWithNamespace.Item = CalendarItemWithNamespace;
@@ -97,12 +97,12 @@ export type {
   CalendarListProps,
   CalendarListRef,
   CalendarMonthEnhanced,
-} from "src/components/CalendarList";
+} from "../components/CalendarList";
 
 // Useful for customizing the layout of the calendar, re-exported for convenience
 CalendarWithNamespace.HStack = HStack;
 CalendarWithNamespace.VStack = VStack;
-export type { HStackProps } from "src/components/HStack";
-export type { VStackProps } from "src/components/VStack";
+export type { HStackProps } from "../components/HStack";
+export type { VStackProps } from "../components/VStack";
 
 export const Calendar = CalendarWithNamespace;

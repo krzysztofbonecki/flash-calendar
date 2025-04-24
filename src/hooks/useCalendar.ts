@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import type { DayState } from "src/components/CalendarItemDay";
+import type { DayState } from "../components/CalendarItemDay";
 import {
   addDays,
   endOfMonth,
@@ -10,8 +10,8 @@ import {
   startOfWeek,
   subDays,
   toDateId,
-} from "src/helpers/dates";
-import { range } from "src/helpers/numbers";
+} from "../helpers/dates";
+import { range } from "../helpers/numbers";
 
 const getNumberOfEmptyCellsAtStart = (
   month: Date,

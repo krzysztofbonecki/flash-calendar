@@ -3,8 +3,8 @@ import React, { useMemo } from "react";
 import type { ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
 
-import { HStack } from "src/components/HStack";
-import type { BaseTheme } from "src/helpers/tokens";
+import { HStack } from "../components/HStack";
+import type { BaseTheme } from "../helpers/tokens";
 
 export interface CalendarRowWeekProps {
   children: ReactNode;

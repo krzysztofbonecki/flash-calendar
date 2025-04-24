@@ -11,11 +11,11 @@ import React, {
 } from "react";
 import { View } from "react-native";
 
-import type { CalendarProps } from "src/components/Calendar";
-import { Calendar } from "src/components/Calendar";
-import { getWeekOfMonth, startOfMonth, toDateId } from "src/helpers/dates";
-import type { CalendarMonth } from "src/hooks/useCalendarList";
-import { getHeightForMonth, useCalendarList } from "src/hooks/useCalendarList";
+import type { CalendarProps } from "../components/Calendar";
+import { Calendar } from "../components/Calendar";
+import { getWeekOfMonth, startOfMonth, toDateId } from "../helpers/dates";
+import type { CalendarMonth } from "../hooks/useCalendarList";
+import { getHeightForMonth, useCalendarList } from "../hooks/useCalendarList";
 
 /**
  * Represents each `CalendarList` item. It's enhanced with the required

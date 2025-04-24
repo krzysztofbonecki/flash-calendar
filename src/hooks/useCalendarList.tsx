@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 
-import type { CalendarProps } from "src/components/Calendar";
+import type { CalendarProps } from "../components/Calendar";
 import {
   fromDateId,
   toDateId,
@@ -9,9 +9,9 @@ import {
   subMonths,
   differenceInMonths,
   getWeeksInMonth,
-} from "src/helpers/dates";
-import type { UseCalendarParams } from "src/hooks/useCalendar";
-import { pipe } from "src/helpers/functions";
+} from "../helpers/dates";
+import type { UseCalendarParams } from "../hooks/useCalendar";
+import { pipe } from "../helpers/functions";
 
 export interface CalendarMonth {
   id: string;

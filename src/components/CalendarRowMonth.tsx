@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { TextStyle, ViewStyle } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
-import { useTheme } from "src/hooks/useTheme";
+import { useTheme } from "../hooks/useTheme";
 
 const styles = StyleSheet.create({
   container: {
