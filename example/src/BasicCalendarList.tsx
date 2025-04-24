@@ -6,9 +6,27 @@ export const BasicCalendarList = () => {
   return (
     <Calendar.List
       calendarActiveDateRanges={[
-        { startId: "2025-04-24", endId: "2025-04-25", color: "red" },
+        { startId: "2025-04-24", endId: "2025-04-25" },
       ]}
       onCalendarDayPress={() => {}}
+      restrictions={[{ startId: "2025-04-15", endId: "2025-04-24" }]}
+      theme={{
+        itemDayContainer: {
+          activeDayFiller: {
+            backgroundColor: "orange",
+          },
+        },
+        itemDay: {
+          base: (params) => {
+            if (params.state === "active") {
+              return {
+                container: { backgroundColor: params.color ?? "orange" },
+              };
+            }
+            return {};
+          },
+        },
+      }}
     />
   );
 };

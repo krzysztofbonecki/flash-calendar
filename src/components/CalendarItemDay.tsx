@@ -305,8 +305,11 @@ export const CalendarItemDayContainer = ({
       bottom: 0,
       right: -(daySpacing + 1), // +1 to cover the 1px gap
       width: daySpacing + 2, // +2 to cover the 1px gap (distributes evenly on both sides)
-      backgroundColor: dayColor ?? baseTheme.colors.background.inverse.primary,
       ...theme?.activeDayFiller,
+      backgroundColor: dayColor
+        ? dayColor
+        : (theme?.activeDayFiller?.backgroundColor ??
+          baseTheme.colors.background.inverse.primary),
     };
   }, [
     baseTheme.colors.background.inverse.primary,

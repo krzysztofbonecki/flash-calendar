@@ -104,6 +104,14 @@ export interface CalendarProps extends UseCalendarParams {
    * Whether to disable all days.
    */
   disabled?: boolean;
+
+  /**
+   * When the calendar is disabled, you can add active ranges that will override the disabled state.
+   */
+  restrictions?: {
+    startId: string;
+    endId: string;
+  }[];
 }
 
 const BaseCalendar = memo(function BaseCalendar(props: CalendarProps) {

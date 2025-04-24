@@ -144,6 +144,14 @@ export interface UseCalendarParams {
    * Whether to disable all days.
    */
   disabled?: boolean;
+
+  /**
+   * When the calendar is disabled, you can restrict the days that can be selected.
+   */
+  restrictions?: {
+    startId: string;
+    endId: string;
+  }[];
 }
 
 type GetStateFields = Pick<
@@ -154,6 +162,7 @@ type GetStateFields = Pick<
   | "calendarDisabledDateIds"
   | "disabledDaysIndexes"
   | "disabled"
+  | "restrictions"
 > & {
   todayId?: string;
   id: string;
@@ -173,6 +182,7 @@ export const getStateFields = ({
   calendarDisabledDateIds,
   disabledDaysIndexes,
   disabled,
+  restrictions,
 }: GetStateFields): CalendarDayStateFields => {
   const activeRange = calendarActiveDateRanges?.find(({ startId, endId }) => {
     // Regular range
@@ -186,15 +196,20 @@ export const getStateFields = ({
     return false;
   });
 
+  const isRestricted = restrictions?.some(({ startId, endId }) => {
+    return id >= startId && id <= endId;
+  });
+
   const isRangeValid =
     activeRange?.startId !== undefined && activeRange.endId !== undefined;
 
-  const isDisabled =
-    (disabled ||
-      disabledDaysIndexes?.includes(date.getDay()) ||
-      calendarDisabledDateIds?.includes(id) ||
-      (calendarMinDateId && id < calendarMinDateId) ||
-      (calendarMaxDateId && id > calendarMaxDateId)) === true;
+  const isDisabled = restrictions?.length
+    ? !isRestricted
+    : (disabled ||
+        disabledDaysIndexes?.includes(date.getDay()) ||
+        calendarDisabledDateIds?.includes(id) ||
+        (calendarMinDateId && id < calendarMinDateId) ||
+        (calendarMaxDateId && id > calendarMaxDateId)) === true;
 
   const isToday = todayId === id;
 
