@@ -9,7 +9,7 @@ export const BasicCalendarList = () => {
         { startId: "2025-04-24", endId: "2025-04-25" },
       ]}
       onCalendarDayPress={() => {}}
-      restrictions={[{ startId: "2025-04-15", endId: "2025-04-24" }]}
+      restrictions={[{ endId: undefined, startId: "2025-04-24" }]}
       theme={{
         itemDayContainer: {
           activeDayFiller: {

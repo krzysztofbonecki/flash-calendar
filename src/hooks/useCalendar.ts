@@ -200,9 +200,9 @@ export const getStateFields = ({
     if (startId && endId) {
       return id >= startId && id <= endId;
     } else if (startId) {
-      return id === startId;
+      return id >= startId;
     } else if (endId) {
-      return id === endId;
+      return id <= endId;
     }
     return false;
   });
