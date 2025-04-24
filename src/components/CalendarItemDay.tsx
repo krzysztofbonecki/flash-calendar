@@ -149,9 +149,11 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
               borderColor: theme.colors.borders.default,
               borderStyle: "solid",
               borderWidth: 1,
+            },
+            content: {
+              ...baseContent,
               opacity: isDisabled ? 0.3 : isDimmed ? 0.5 : undefined,
             },
-            content: baseContent,
           };
     },
   };
