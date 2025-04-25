@@ -209,16 +209,18 @@ export const getStateFields = ({
     return false;
   });
 
-  const isRestricted = restrictions?.some(({ startId, endId }) => {
-    if (startId && endId) {
-      return id >= startId && id <= endId;
-    } else if (startId) {
-      return id >= startId;
-    } else if (endId) {
-      return id <= endId;
-    }
-    return false;
-  });
+  const isRestricted = restrictions?.length
+    ? restrictions?.some(({ startId, endId }) => {
+        if (startId && endId) {
+          return id >= startId && id <= endId;
+        } else if (startId) {
+          return id >= startId;
+        } else if (endId) {
+          return id <= endId;
+        }
+        return false;
+      })
+    : true;
 
   const isDimmed =
     disabledDaysIndexes?.includes(date.getDay()) ||
@@ -228,12 +230,12 @@ export const getStateFields = ({
   const isRangeValid =
     activeRange?.startId !== undefined && activeRange.endId !== undefined;
 
-  const isDisabled = restrictions?.length
-    ? !isRestricted
-    : (disabled ||
-        calendarDisabledDateIds?.includes(id) ||
-        (calendarMinDateId && id < calendarMinDateId) ||
-        (calendarMaxDateId && id > calendarMaxDateId)) === true;
+  const isDisabled =
+    (!isRestricted ||
+      disabled ||
+      calendarDisabledDateIds?.includes(id) ||
+      (calendarMinDateId && id < calendarMinDateId) ||
+      (calendarMaxDateId && id > calendarMaxDateId)) === true;
 
   const isToday = todayId === id;
 
