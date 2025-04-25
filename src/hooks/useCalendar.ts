@@ -135,20 +135,24 @@ export interface UseCalendarParams {
   /**
    * The disabled date IDs. Dates in this list will be in the `disabled` state
    * unless they are part of an active range.
+   * Its disabled the day from being selected.
    */
   calendarDisabledDateIds?: string[];
   /**
    * The indexes of the days to be disabled.
    * Starts from 0 (Sunday) to 6 (Saturday).
+   * Its not disabled the day from being selected, but it will change style of the day to be dimmed.
    */
   disabledDaysIndexes?: number[];
+
   /**
    * Whether to disable all days.
+   * Its not change style of the day, but it will disable the day from being selected.
    */
   disabled?: boolean;
 
   /**
-   * When the calendar is disabled, you can restrict the days that can be selected.
+   * Restricts the range of days that can be selected.
    */
   restrictions?: {
     startId?: string;
@@ -217,8 +221,8 @@ export const getStateFields = ({
   });
 
   const isDimmed =
-    disabledDaysIndexes?.includes(date.getDay()) ??
-    dimmedDays?.includes(id) ??
+    disabledDaysIndexes?.includes(date.getDay()) ||
+    dimmedDays?.includes(id) ||
     false;
 
   const isRangeValid =
@@ -236,10 +240,10 @@ export const getStateFields = ({
   const state: DayState = activeRange
     ? ("active" as const)
     : isDisabled
-    ? "disabled"
-    : isToday
-    ? "today"
-    : "idle";
+      ? "disabled"
+      : isToday
+        ? "today"
+        : "idle";
 
   return {
     isStartOfRange: id === activeRange?.startId,

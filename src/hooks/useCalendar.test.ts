@@ -378,5 +378,114 @@ describe("buildCalendar", () => {
           .every((state) => state === "idle")
       ).toBeTrue();
     });
+
+    it("disabledDaysIndexes: dims specific days of the week without disabling selection", () => {
+      const january = buildCalendar({
+        calendarMonthId: "2024-01-01",
+        disabledDaysIndexes: [0, 6], // Sunday and Saturday
+      });
+
+      // Check first week
+      const firstWeek = january.weeksList[0];
+      if (!firstWeek) throw new Error("First week is undefined");
+
+      // Days should be dimmed but not disabled
+      expect(firstWeek[0]?.isDimmed).toBeTrue(); // Sunday
+      expect(firstWeek[6]?.isDimmed).toBeTrue(); // Saturday
+      expect(firstWeek[1]?.isDimmed).toBeFalse(); // Monday
+
+      // State should be idle (selectable)
+      expect(firstWeek[0]?.state).toBe("idle");
+      expect(firstWeek[6]?.state).toBe("idle");
+      expect(firstWeek[1]?.state).toBe("idle");
+    });
+
+    it("disabled: disables selection without changing style", () => {
+      const january = buildCalendar({
+        calendarMonthId: "2024-01-01",
+        disabled: true,
+      });
+
+      // All days should be disabled but not dimmed
+      expect(
+        january.weeksList
+          .flatMap((week) => week.map((day) => day.state))
+          .every((state) => state === "disabled")
+      ).toBeTrue();
+
+      expect(
+        january.weeksList
+          .flatMap((week) => week.map((day) => day.isDimmed))
+          .every((isDimmed) => isDimmed === false)
+      ).toBeTrue();
+    });
+
+    it("restrictions: restricts selection to specified ranges", () => {
+      const january = buildCalendar({
+        calendarMonthId: "2024-01-01",
+        restrictions: [
+          { startId: "2024-01-10", endId: "2024-01-15" },
+          { startId: "2024-01-20", endId: "2024-01-25" },
+        ],
+      });
+
+      // Days outside restrictions should be disabled
+      expect(january.weeksList[1]?.at(2)?.id).toBe("2024-01-09");
+      expect(january.weeksList[1]?.at(2)?.state).toBe("disabled");
+
+      // Days within restrictions should be idle (selectable)
+      expect(january.weeksList[1]?.at(3)?.id).toBe("2024-01-10");
+      expect(january.weeksList[1]?.at(3)?.state).toBe("idle");
+      expect(january.weeksList[2]?.at(1)?.id).toBe("2024-01-15");
+      expect(january.weeksList[2]?.at(1)?.state).toBe("idle");
+
+      // Days between restrictions should be disabled
+      expect(january.weeksList[2]?.at(5)?.id).toBe("2024-01-19");
+      expect(january.weeksList[2]?.at(5)?.state).toBe("disabled");
+
+      // Days within second restriction should be idle (selectable)
+      expect(january.weeksList[3]?.at(0)?.id).toBe("2024-01-21");
+      expect(january.weeksList[3]?.at(0)?.state).toBe("idle");
+    });
+
+    it("dimmedDays: dims specified days without affecting selection", () => {
+      const january = buildCalendar({
+        calendarMonthId: "2024-01-01",
+        dimmedDays: ["2024-01-10", "2024-01-15"],
+      });
+
+      // Check if specified days are dimmed
+      expect(january.weeksList[1]?.at(3)?.id).toBe("2024-01-10");
+      expect(january.weeksList[1]?.at(3)?.isDimmed).toBeTrue();
+      expect(january.weeksList[2]?.at(1)?.id).toBe("2024-01-15");
+      expect(january.weeksList[2]?.at(1)?.isDimmed).toBeTrue();
+
+      // Check if other days are not dimmed
+      expect(january.weeksList[1]?.at(2)?.id).toBe("2024-01-09");
+      expect(january.weeksList[1]?.at(2)?.isDimmed).toBeFalse();
+
+      // All days should be idle (selectable)
+      expect(january.weeksList[1]?.at(3)?.state).toBe("idle");
+      expect(january.weeksList[2]?.at(1)?.state).toBe("idle");
+      expect(january.weeksList[1]?.at(2)?.state).toBe("idle");
+    });
+
+    it("combines dimmedDays with disabledDaysIndexes: both affect style but not selection", () => {
+      const january = buildCalendar({
+        calendarMonthId: "2024-01-01",
+        dimmedDays: ["2024-01-10"],
+        disabledDaysIndexes: [0], // Sunday
+      });
+
+      // Check if Sunday is dimmed but not disabled
+      expect(january.weeksList[0]?.at(0)?.id).toBe("2023-12-31");
+      expect(january.weeksList[0]?.at(0)?.isDimmed).toBeTrue();
+      expect(january.weeksList[0]?.at(0)?.state).toBe("idle");
+
+      // Check if specified day is dimmed but not disabled
+      expect(january.weeksList[1]?.at(3)?.id).toBe("2024-01-10");
+      expect(january.weeksList[1]?.at(3)?.isDimmed).toBeTrue();
+      expect(january.weeksList[1]?.at(3)?.state).toBe("idle");
+    });
   });
 });

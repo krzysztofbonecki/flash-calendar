@@ -98,15 +98,18 @@ export interface CalendarProps extends UseCalendarParams {
   /**
    * The indexes of the days to be disabled.
    * Starts from 0 (Sunday) to 6 (Saturday).
+   * Its not disabled the day from being selected, but it will change style of the day to be dimmed.
    */
   disabledDaysIndexes?: number[];
+
   /**
    * Whether to disable all days.
+   * Its not change style of the day, but it will disable the day from being selected.
    */
   disabled?: boolean;
 
   /**
-   * When the calendar is disabled, you can add active ranges that will override the disabled state.
+
    */
   restrictions?: {
     startId?: string;

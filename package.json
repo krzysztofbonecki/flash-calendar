@@ -51,11 +51,7 @@
     "react-native": "0.73.4",
     "react-test-renderer": "^18.2.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "@storybook/react": "^8.6.12",
-    "@storybook/addon-ondevice-actions": "^7.6.17",
-    "@storybook/addon-ondevice-controls": "^7.6.17",
-    "@storybook/react-native": "^7.6.17"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "@shopify/flash-list": "*",
