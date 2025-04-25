@@ -407,7 +407,7 @@ export const CalendarItemDayWithContainer = ({
             fontSize: 8,
             fontStyle: "italic",
             textAlign: "center",
-            color: metadata.state === "active" ? "white" : "black",
+            color: "black",
           }}
         >
           {"\n"}render: {renderCounter}x
