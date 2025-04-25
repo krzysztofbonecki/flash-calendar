@@ -172,7 +172,6 @@ type GetStateFields = Pick<
   | "calendarMaxDateId"
   | "calendarDisabledDateIds"
   | "disabledDaysIndexes"
-  | "disabled"
   | "restrictions"
   | "dimmedDays"
 > & {
@@ -193,7 +192,6 @@ export const getStateFields = ({
   calendarMaxDateId,
   calendarDisabledDateIds,
   disabledDaysIndexes,
-  disabled,
   restrictions,
   dimmedDays,
 }: GetStateFields): CalendarDayStateFields => {
@@ -232,7 +230,6 @@ export const getStateFields = ({
 
   const isDisabled =
     (!isRestricted ||
-      disabled ||
       calendarDisabledDateIds?.includes(id) ||
       (calendarMinDateId && id < calendarMinDateId) ||
       (calendarMaxDateId && id > calendarMaxDateId)) === true;

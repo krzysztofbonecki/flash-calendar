@@ -103,13 +103,7 @@ export interface CalendarProps extends UseCalendarParams {
   disabledDaysIndexes?: number[];
 
   /**
-   * Whether to disable all days.
-   * Its not change style of the day, but it will disable the day from being selected.
-   */
-  disabled?: boolean;
-
-  /**
-
+   * Restricts the range of days that can be selected.
    */
   restrictions?: {
     startId?: string;
