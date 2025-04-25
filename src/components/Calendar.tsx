@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useRef } from "react";
-import { Text, type ColorSchemeName } from "react-native";
+import React, { memo, useEffect } from "react";
+import { type ColorSchemeName } from "react-native";
 
 import type {
   CalendarItemDayContainerProps,
@@ -132,8 +132,6 @@ const BaseCalendar = memo(function BaseCalendar(props: CalendarProps) {
   const { calendarRowMonth, weeksList, weekDaysList } =
     useCalendar(buildCalendarParams);
 
-  const renderCounter = useRenderCount(calendarRowMonth);
-
   return (
     <VStack
       alignItems="center"
@@ -144,10 +142,6 @@ const BaseCalendar = memo(function BaseCalendar(props: CalendarProps) {
         theme={theme?.rowMonth}
       >
         {uppercaseFirstLetter(calendarRowMonth)}
-        <Text style={{ fontWeight: "bold" }}>
-          {" "}
-          (render: {renderCounter}x ⚡)
-        </Text>
       </CalendarRowMonth>
       <CalendarRowWeek spacing={8} theme={theme?.rowWeek}>
         {weekDaysList.map((weekDay, i) => (
@@ -235,20 +229,3 @@ export const Calendar = memo(function Calendar(props: CalendarProps) {
     </CalendarThemeProvider>
   );
 });
-
-const useRenderCount = (id?: string) => {
-  const renderCount = useRef(0);
-  renderCount.current += 1;
-
-  const lastItemId = useRef(id);
-
-  /**
-   * See more at: https://shopify.github.io/flash-list/docs/recycling
-   */
-  if (lastItemId.current !== id) {
-    lastItemId.current = id;
-    renderCount.current = 1;
-  }
-
-  return renderCount.current;
-};
