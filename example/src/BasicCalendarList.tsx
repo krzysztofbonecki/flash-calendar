@@ -6,7 +6,12 @@ export const BasicCalendarList = () => {
   return (
     <Calendar.List
       calendarActiveDateRanges={[
-        { startId: "2025-04-24", endId: "2025-04-25", color: "red" },
+        {
+          startId: "2025-04-24",
+          endId: "2025-04-25",
+          color: "red",
+          textColor: "green",
+        },
       ]}
       onCalendarDayPress={() => {}}
       dimmedDays={["2025-04-24", "2025-04-27", "2025-04-26"]}

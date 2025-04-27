@@ -62,12 +62,18 @@ export const useOptimizedDayMetadata = (
 
       // We're only interested in the active date ranges, no need to worry about
       // disabled states. These are already covered by the base metadata.
-      const { isStartOfRange, isEndOfRange, isRangeValid, state, color } =
-        getStateFields({
-          id: metadata.id,
-          date: metadata.date,
-          calendarActiveDateRanges: ranges,
-        });
+      const {
+        isStartOfRange,
+        isEndOfRange,
+        isRangeValid,
+        state,
+        color,
+        textColor,
+      } = getStateFields({
+        id: metadata.id,
+        date: metadata.date,
+        calendarActiveDateRanges: ranges,
+      });
 
       if (state === "active") {
         setMetadata((prev) => ({
@@ -77,6 +83,7 @@ export const useOptimizedDayMetadata = (
           isRangeValid,
           color,
           state,
+          textColor,
         }));
       } else {
         // Resets the state when it's no longer active.

@@ -249,6 +249,7 @@ export const getStateFields = ({
     isDisabled,
     isToday,
     color: activeRange?.color,
+    textColor: activeRange?.textColor,
     isDimmed,
   };
 };
