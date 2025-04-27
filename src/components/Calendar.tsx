@@ -92,7 +92,7 @@ export interface CalendarProps extends UseCalendarParams {
   /**
    * The callback to be called when a day is pressed.
    */
-  onCalendarDayPress: CalendarOnDayPress;
+  onCalendarDayPress?: CalendarOnDayPress;
   /** Theme to customize the calendar component. */
   theme?: CalendarTheme;
   /**

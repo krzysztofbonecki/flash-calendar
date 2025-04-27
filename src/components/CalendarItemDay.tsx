@@ -163,7 +163,7 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
 
 export interface CalendarItemDayProps {
   children: ReactNode;
-  onPress: (id: string) => void;
+  onPress?: (id: string) => void;
   metadata: CalendarDayMetadata;
   theme?: Partial<
     Record<
@@ -205,12 +205,12 @@ export const CalendarItemDay = ({
   }, [baseTheme]);
 
   const handlePress = useCallback(() => {
-    onPress(metadata.id);
+    onPress?.(metadata.id);
   }, [metadata.id, onPress]);
 
   return (
     <Pressable
-      disabled={metadata.isDisabled}
+      disabled={!onPress || metadata.isDisabled}
       onPress={handlePress}
       style={({
         pressed: isPressed,

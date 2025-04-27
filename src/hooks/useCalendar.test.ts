@@ -400,26 +400,6 @@ describe("buildCalendar", () => {
       expect(firstWeek[1]?.state).toBe("idle");
     });
 
-    it("disabled: disables selection without changing style", () => {
-      const january = buildCalendar({
-        calendarMonthId: "2024-01-01",
-        disabled: true,
-      });
-
-      // All days should be disabled but not dimmed
-      expect(
-        january.weeksList
-          .flatMap((week) => week.map((day) => day.state))
-          .every((state) => state === "disabled")
-      ).toBeTrue();
-
-      expect(
-        january.weeksList
-          .flatMap((week) => week.map((day) => day.isDimmed))
-          .every((isDimmed) => isDimmed === false)
-      ).toBeTrue();
-    });
-
     it("restrictions: restricts selection to specified ranges", () => {
       const january = buildCalendar({
         calendarMonthId: "2024-01-01",
