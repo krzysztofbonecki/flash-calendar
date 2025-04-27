@@ -42,6 +42,8 @@ interface CalendarDayStateFields {
   isRangeValid: boolean;
   /** The color of the range */
   color?: string;
+  /** The text color of the range */
+  textColor?: string;
   /** Is the day dimmed? */
   isDimmed: boolean;
 }
@@ -78,6 +80,7 @@ export interface CalendarActiveDateRange {
   startId?: string;
   endId?: string;
   color?: string;
+  textColor?: string;
 }
 
 export interface UseCalendarParams {

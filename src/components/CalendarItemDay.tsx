@@ -44,6 +44,7 @@ type CalendarItemDayTheme = Record<
     isHovered?: boolean;
     isFocused?: boolean;
     color?: string;
+    textColor?: string;
     isDisabled: boolean;
     isDimmed: boolean;
   }) => DayTheme
@@ -57,6 +58,7 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
   return {
     active: ({
       color,
+      textColor,
       isPressed,
       isHovered,
       isStartOfRange,
@@ -84,7 +86,7 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
               },
               content: {
                 ...baseContent,
-                color: theme.colors.content.inverse.primary,
+                color: textColor ?? theme.colors.content.inverse.primary,
               },
             };
 
@@ -222,6 +224,7 @@ export const CalendarItemDay = ({
           isEndOfRange: metadata.isEndOfRange ?? false,
           isStartOfRange: metadata.isStartOfRange ?? false,
           color: metadata.color,
+          textColor: metadata.textColor,
           isDisabled: metadata.isDisabled,
           isDimmed: metadata.isDimmed,
         };
@@ -242,6 +245,7 @@ export const CalendarItemDay = ({
           isEndOfRange: metadata.isEndOfRange ?? false,
           isStartOfRange: metadata.isStartOfRange ?? false,
           color: metadata.color,
+          textColor: metadata.textColor,
           isDisabled: metadata.isDisabled,
           isDimmed: metadata.isDimmed,
         };
