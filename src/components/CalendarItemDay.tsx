@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo } from "react";
 import type { TextProps, TextStyle, ViewStyle } from "react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -384,7 +384,6 @@ export const CalendarItemDayWithContainer = ({
   calendarInstanceId,
 }: CalendarItemDayWithContainerProps) => {
   const metadata = useOptimizedDayMetadata(baseMetadata, calendarInstanceId);
-  const renderCounter = useRenderCount();
 
   return (
     <CalendarItemDayContainer
@@ -406,23 +405,7 @@ export const CalendarItemDayWithContainer = ({
         theme={theme}
       >
         {children}
-        <Text
-          style={{
-            fontSize: 8,
-            fontStyle: "italic",
-            textAlign: "center",
-            color: metadata.state === "active" ? "white" : "black",
-          }}
-        >
-          {"\n"}render: {renderCounter}x
-        </Text>
       </CalendarItemDay>
     </CalendarItemDayContainer>
   );
-};
-
-export const useRenderCount = () => {
-  const renderCount = useRef(0);
-  renderCount.current += 1;
-  return renderCount.current;
 };
