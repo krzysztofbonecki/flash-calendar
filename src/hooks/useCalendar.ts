@@ -201,29 +201,21 @@ export const getStateFields = ({
   restrictions,
   dimmedDays,
 }: GetStateFields): CalendarDayStateFields => {
-  const activeRange =
-    calendarActiveDateRanges?.find(({ startId, endId }) => {
-      // Regular range
-      if (startId && endId) {
-        return id >= startId && id <= endId;
-      } else if (startId) {
-        return id === startId;
-      } else if (endId) {
-        return id === endId;
-      }
-      return false;
-    }) ??
-    calendarPreActiveDateRanges?.find(({ startId, endId }) => {
-      // Regular range
-      if (startId && endId) {
-        return id >= startId && id <= endId;
-      } else if (startId) {
-        return id === startId;
-      } else if (endId) {
-        return id === endId;
-      }
-      return false;
-    });
+  const ranges = (calendarActiveDateRanges ?? []).concat(
+    calendarPreActiveDateRanges ?? []
+  );
+
+  const activeRange = ranges?.find(({ startId, endId }) => {
+    // Regular range
+    if (startId && endId) {
+      return id >= startId && id <= endId;
+    } else if (startId) {
+      return id === startId;
+    } else if (endId) {
+      return id === endId;
+    }
+    return false;
+  });
 
   const isRestricted = restrictions?.length
     ? restrictions?.some(({ startId, endId }) => {

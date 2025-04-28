@@ -44,7 +44,9 @@ export const useOptimizedDayMetadata = (
   calendarInstanceId?: string
 ) => {
   const [metadata, setMetadata] = useState(baseMetadata);
-  const [preSelectedMetaData, setPreSelectedMetaData] = useState(baseMetadata);
+
+  // This is used to store the matadata with the pre-active date ranges.
+  const [preMetadata, setPreMetadata] = useState(baseMetadata);
 
   const safeCalendarInstanceId =
     calendarInstanceId ?? DEFAULT_CALENDAR_INSTANCE_ID;
@@ -52,7 +54,7 @@ export const useOptimizedDayMetadata = (
   // Ensure the metadata is updated when the base changes.
   useEffect(() => {
     setMetadata(baseMetadata);
-    setPreSelectedMetaData(baseMetadata);
+    setPreMetadata(baseMetadata);
   }, [baseMetadata]);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export const useOptimizedDayMetadata = (
       } = getStateFields({
         id: metadata.id,
         date: metadata.date,
-        calendarActiveDateRanges: ranges,
+        calendarPreActiveDateRanges: ranges,
       });
 
       if (state === "active") {
@@ -89,11 +91,21 @@ export const useOptimizedDayMetadata = (
           textColor,
         };
         setMetadata(newMetadata);
-        setPreSelectedMetaData(newMetadata);
+        setPreMetadata(newMetadata);
+      } else if (metadata.state === "active") {
+        setPreMetadata({
+          ...metadata,
+          isStartOfRange,
+          isEndOfRange,
+          isRangeValid,
+          color,
+          state,
+          textColor,
+        });
       } else {
         // Resets the state when it's no longer active.
         setMetadata(baseMetadata);
-        setPreSelectedMetaData(baseMetadata);
+        setPreMetadata(baseMetadata);
       }
     };
 
@@ -102,7 +114,7 @@ export const useOptimizedDayMetadata = (
     return () => {
       activeDateRangesEmitter.off("onSetPreActiveDateRanges", handler);
     };
-  }, [baseMetadata, safeCalendarInstanceId, metadata]);
+  }, [safeCalendarInstanceId, baseMetadata, metadata]);
 
   useEffect(() => {
     const handler = (payload: OnSetActiveDateRangesPayload) => {
@@ -122,24 +134,23 @@ export const useOptimizedDayMetadata = (
         color,
         textColor,
       } = getStateFields({
-        id: metadata.id,
-        date: metadata.date,
+        id: baseMetadata.id,
+        date: baseMetadata.date,
         calendarActiveDateRanges: ranges,
       });
 
       if (state === "active") {
-        const newMetadata = {
-          ...metadata,
+        setMetadata((prev) => ({
+          ...prev,
           isStartOfRange,
           isEndOfRange,
           isRangeValid,
           color,
           state,
           textColor,
-        };
-        setMetadata(newMetadata);
-      } else if (preSelectedMetaData.state === "active") {
-        setMetadata(preSelectedMetaData);
+        }));
+      } else if (preMetadata.state === "active") {
+        setMetadata(preMetadata);
       } else {
         // Resets the state when it's no longer active.
         setMetadata(baseMetadata);
@@ -151,7 +162,7 @@ export const useOptimizedDayMetadata = (
     return () => {
       activeDateRangesEmitter.off("onSetActiveDateRanges", handler);
     };
-  }, [preSelectedMetaData, baseMetadata, safeCalendarInstanceId, metadata]);
+  }, [safeCalendarInstanceId, preMetadata, baseMetadata]);
 
   return metadata;
 };

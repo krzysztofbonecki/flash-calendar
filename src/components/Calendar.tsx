@@ -205,6 +205,13 @@ export const Calendar = memo(function Calendar(props: CalendarProps) {
   } = props;
 
   useEffect(() => {
+    activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+      instanceId: calendarInstanceId,
+      ranges: calendarPreActiveDateRanges ?? [],
+    });
+  }, [calendarPreActiveDateRanges, calendarInstanceId, calendarMonthId]);
+
+  useEffect(() => {
     activeDateRangesEmitter.emit("onSetActiveDateRanges", {
       instanceId: calendarInstanceId,
       ranges: calendarActiveDateRanges ?? [],
@@ -220,13 +227,6 @@ export const Calendar = memo(function Calendar(props: CalendarProps) {
      * [#11](https://github.com/MarceloPrado/flash-calendar/issues/11).
      */
   }, [calendarActiveDateRanges, calendarInstanceId, calendarMonthId]);
-
-  useEffect(() => {
-    activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
-      instanceId: calendarInstanceId,
-      ranges: calendarPreActiveDateRanges ?? [],
-    });
-  }, [calendarPreActiveDateRanges, calendarInstanceId, calendarMonthId]);
 
   return (
     <CalendarThemeProvider colorScheme={calendarColorScheme}>
