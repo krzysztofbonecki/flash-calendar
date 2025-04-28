@@ -77,7 +77,7 @@ export const useOptimizedDayMetadata = (
       } = getStateFields({
         id: metadata.id,
         date: metadata.date,
-        calendarPreActiveDateRanges: ranges,
+        calendarActiveDateRanges: ranges,
       });
 
       if (state === "active") {

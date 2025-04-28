@@ -172,7 +172,6 @@ export interface UseCalendarParams {
 type GetStateFields = Pick<
   UseCalendarParams,
   | "calendarActiveDateRanges"
-  | "calendarPreActiveDateRanges"
   | "calendarMinDateId"
   | "calendarMaxDateId"
   | "calendarDisabledDateIds"
@@ -193,7 +192,6 @@ export const getStateFields = ({
   id,
   date,
   calendarActiveDateRanges,
-  calendarPreActiveDateRanges,
   calendarMinDateId,
   calendarMaxDateId,
   calendarDisabledDateIds,
@@ -201,11 +199,7 @@ export const getStateFields = ({
   restrictions,
   dimmedDays,
 }: GetStateFields): CalendarDayStateFields => {
-  const ranges = (calendarActiveDateRanges ?? []).concat(
-    calendarPreActiveDateRanges ?? []
-  );
-
-  const activeRange = ranges?.find(({ startId, endId }) => {
+  const activeRange = calendarActiveDateRanges?.find(({ startId, endId }) => {
     // Regular range
     if (startId && endId) {
       return id >= startId && id <= endId;
