@@ -1,5 +1,5 @@
 import mitt from "mitt";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   getStateFields,
@@ -44,6 +44,7 @@ export const useOptimizedDayMetadata = (
   calendarInstanceId?: string
 ) => {
   const [metadata, setMetadata] = useState(baseMetadata);
+  const [preSelectedMetaData, setPreSelectedMetaData] = useState(baseMetadata);
 
   const safeCalendarInstanceId =
     calendarInstanceId ?? DEFAULT_CALENDAR_INSTANCE_ID;
@@ -51,10 +52,11 @@ export const useOptimizedDayMetadata = (
   // Ensure the metadata is updated when the base changes.
   useEffect(() => {
     setMetadata(baseMetadata);
+    setPreSelectedMetaData(baseMetadata);
   }, [baseMetadata]);
 
-  const handler = useCallback(
-    (payload: OnSetActiveDateRangesPayload) => {
+  useEffect(() => {
+    const handler = (payload: OnSetActiveDateRangesPayload) => {
       const { ranges, instanceId = DEFAULT_CALENDAR_INSTANCE_ID } = payload;
       if (instanceId !== safeCalendarInstanceId) {
         // This event is not for this instance, ignore it.
@@ -77,38 +79,79 @@ export const useOptimizedDayMetadata = (
       });
 
       if (state === "active") {
-        setMetadata((prev) => ({
-          ...prev,
+        const newMetadata = {
+          ...metadata,
           isStartOfRange,
           isEndOfRange,
           isRangeValid,
           color,
           state,
           textColor,
-        }));
+        };
+        setMetadata(newMetadata);
+        setPreSelectedMetaData(newMetadata);
       } else {
         // Resets the state when it's no longer active.
         setMetadata(baseMetadata);
+        setPreSelectedMetaData(baseMetadata);
       }
-    },
-    [baseMetadata, safeCalendarInstanceId, metadata]
-  );
-
-  useEffect(() => {
-    activeDateRangesEmitter.on("onSetActiveDateRanges", handler);
-
-    return () => {
-      activeDateRangesEmitter.off("onSetActiveDateRanges", handler);
     };
-  }, [handler]);
 
-  useEffect(() => {
     activeDateRangesEmitter.on("onSetPreActiveDateRanges", handler);
 
     return () => {
       activeDateRangesEmitter.off("onSetPreActiveDateRanges", handler);
     };
-  }, [handler]);
+  }, [baseMetadata, safeCalendarInstanceId, metadata]);
+
+  useEffect(() => {
+    const handler = (payload: OnSetActiveDateRangesPayload) => {
+      const { ranges, instanceId = DEFAULT_CALENDAR_INSTANCE_ID } = payload;
+      if (instanceId !== safeCalendarInstanceId) {
+        // This event is not for this instance, ignore it.
+        return;
+      }
+
+      // We're only interested in the active date ranges, no need to worry about
+      // disabled states. These are already covered by the base metadata.
+      const {
+        isStartOfRange,
+        isEndOfRange,
+        isRangeValid,
+        state,
+        color,
+        textColor,
+      } = getStateFields({
+        id: metadata.id,
+        date: metadata.date,
+        calendarActiveDateRanges: ranges,
+      });
+
+      if (state === "active") {
+        const newMetadata = {
+          ...metadata,
+          isStartOfRange,
+          isEndOfRange,
+          isRangeValid,
+          color,
+          state,
+          textColor,
+        };
+        setMetadata(newMetadata);
+      } else if (preSelectedMetaData.state === "active") {
+        setMetadata(preSelectedMetaData);
+      } else {
+        // Resets the state when it's no longer active.
+        setMetadata(baseMetadata);
+      }
+    };
+
+    activeDateRangesEmitter.on("onSetActiveDateRanges", handler);
+
+    return () => {
+      activeDateRangesEmitter.off("onSetActiveDateRanges", handler);
+    };
+  }, [preSelectedMetaData, baseMetadata, safeCalendarInstanceId, metadata]);
 
   return metadata;
 };

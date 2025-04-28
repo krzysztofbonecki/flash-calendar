@@ -203,6 +203,7 @@ export const Calendar = memo(function Calendar(props: CalendarProps) {
     calendarPreActiveDateRanges,
     ...otherProps
   } = props;
+
   useEffect(() => {
     activeDateRangesEmitter.emit("onSetActiveDateRanges", {
       instanceId: calendarInstanceId,

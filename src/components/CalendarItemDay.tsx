@@ -438,6 +438,7 @@ export const CalendarItemDayWithContainer = ({
   calendarInstanceId,
 }: CalendarItemDayWithContainerProps) => {
   const metadata = useOptimizedDayMetadata(baseMetadata, calendarInstanceId);
+  const renderCounter = useRenderCount();
 
   return (
     <CalendarItemDayContainer
@@ -459,7 +460,25 @@ export const CalendarItemDayWithContainer = ({
         theme={theme}
       >
         {children}
+        <Text
+          style={{
+            fontSize: 10,
+            fontStyle: "italic",
+            textAlign: "center",
+            color: "black",
+          }}
+        >
+          {"\n"} {renderCounter}x
+        </Text>
       </CalendarItemDay>
     </CalendarItemDayContainer>
   );
+};
+
+import { useRef } from "react";
+
+const useRenderCount = () => {
+  const renderCount = useRef(0);
+  renderCount.current += 1;
+  return renderCount.current;
 };
