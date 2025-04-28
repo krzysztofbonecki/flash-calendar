@@ -589,3 +589,230 @@ describe("useOptimizedDayMetadata with calendarInstanceId", () => {
     expect(result.current).toEqual(baseMetadata);
   });
 });
+
+describe("useOptimizedDayMetadata with pre-active ranges", () => {
+  const getBaseMetadata = (date: string): CalendarDayMetadata => ({
+    date: fromDateId(date),
+    displayLabel: date.split("-")[2]!,
+    id: date,
+    isDifferentMonth: false,
+    isDisabled: false,
+    isEndOfMonth: false,
+    isEndOfRange: false,
+    isEndOfWeek: false,
+    isRangeValid: false,
+    isStartOfMonth: false,
+    isStartOfRange: false,
+    isStartOfWeek: false,
+    isToday: false,
+    isWeekend: false,
+    state: "idle",
+    isDimmed: false,
+  });
+
+  it("updates metadata when pre-active range is set", () => {
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() => useOptimizedDayMetadata(baseMetadata));
+
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+          },
+        ],
+      });
+    });
+
+    expect(result.current).toEqual({
+      ...baseMetadata,
+      state: "active",
+      isStartOfRange: true,
+      isEndOfRange: true,
+      isRangeValid: true,
+    });
+  });
+
+  it("responds to pre-active events for the correct instance ID", () => {
+    const instanceId = "test-calendar-pre-1";
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() =>
+      useOptimizedDayMetadata(baseMetadata, instanceId)
+    );
+
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        instanceId,
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+          },
+        ],
+      });
+    });
+
+    expect(result.current).toEqual({
+      ...baseMetadata,
+      state: "active",
+      isStartOfRange: true,
+      isEndOfRange: true,
+      isRangeValid: true,
+    });
+  });
+
+  it("ignores pre-active events for different instance IDs", () => {
+    const instanceId = "test-calendar-pre-2";
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() =>
+      useOptimizedDayMetadata(baseMetadata, instanceId)
+    );
+
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        instanceId: "different-calendar",
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+          },
+        ],
+      });
+    });
+
+    expect(result.current).toEqual(baseMetadata);
+  });
+
+  it("active ranges take precedence over pre-active ranges", () => {
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() => useOptimizedDayMetadata(baseMetadata));
+
+    // Set pre-active range
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+            color: "blue",
+          },
+        ],
+      });
+    });
+
+    // Set active range with different color
+    act(() => {
+      activeDateRangesEmitter.emit("onSetActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+            color: "red",
+          },
+        ],
+      });
+    });
+
+    expect(result.current).toEqual({
+      ...baseMetadata,
+      state: "active",
+      isStartOfRange: true,
+      isEndOfRange: true,
+      isRangeValid: true,
+      color: "red", // Should use active range color
+    });
+  });
+
+  it("clearing active range reveals pre-active range", () => {
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() => useOptimizedDayMetadata(baseMetadata));
+
+    // Set pre-active range
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+            color: "blue",
+          },
+        ],
+      });
+    });
+
+    // Set active range
+    act(() => {
+      activeDateRangesEmitter.emit("onSetActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+            color: "red",
+          },
+        ],
+      });
+    });
+
+    // Clear active range
+    act(() => {
+      activeDateRangesEmitter.emit("onSetActiveDateRanges", {
+        ranges: [],
+      });
+    });
+
+    expect(result.current).toEqual({
+      ...baseMetadata,
+      state: "active",
+      isStartOfRange: true,
+      isEndOfRange: true,
+      isRangeValid: true,
+      color: "blue", // Should fall back to pre-active range color
+    });
+  });
+
+  it("handles multiple ranges in both active and pre-active", () => {
+    const baseMetadata = getBaseMetadata("2024-02-16");
+    const { result } = renderHook(() => useOptimizedDayMetadata(baseMetadata));
+
+    // Set multiple pre-active ranges
+    act(() => {
+      activeDateRangesEmitter.emit("onSetPreActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-15",
+            endId: "2024-02-15",
+            color: "blue",
+          },
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-16",
+            color: "blue",
+          },
+        ],
+      });
+    });
+
+    // Set active range that overlaps with pre-active
+    act(() => {
+      activeDateRangesEmitter.emit("onSetActiveDateRanges", {
+        ranges: [
+          {
+            startId: "2024-02-16",
+            endId: "2024-02-17",
+            color: "red",
+          },
+        ],
+      });
+    });
+
+    expect(result.current).toEqual({
+      ...baseMetadata,
+      state: "active",
+      isStartOfRange: true,
+      isEndOfRange: false,
+      isRangeValid: true,
+      color: "red", // Should use active range color
+    });
+  });
+});

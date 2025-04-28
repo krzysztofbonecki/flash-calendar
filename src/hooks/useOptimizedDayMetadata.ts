@@ -1,5 +1,5 @@
 import mitt from "mitt";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   getStateFields,
@@ -22,6 +22,7 @@ interface OnSetActiveDateRangesPayload {
  */
 export const activeDateRangesEmitter = mitt<{
   onSetActiveDateRanges: OnSetActiveDateRangesPayload;
+  onSetPreActiveDateRanges: OnSetActiveDateRangesPayload;
 }>();
 
 /**
@@ -52,8 +53,8 @@ export const useOptimizedDayMetadata = (
     setMetadata(baseMetadata);
   }, [baseMetadata]);
 
-  useEffect(() => {
-    const handler = (payload: OnSetActiveDateRangesPayload) => {
+  const handler = useCallback(
+    (payload: OnSetActiveDateRangesPayload) => {
       const { ranges, instanceId = DEFAULT_CALENDAR_INSTANCE_ID } = payload;
       if (instanceId !== safeCalendarInstanceId) {
         // This event is not for this instance, ignore it.
@@ -89,14 +90,25 @@ export const useOptimizedDayMetadata = (
         // Resets the state when it's no longer active.
         setMetadata(baseMetadata);
       }
-    };
+    },
+    [baseMetadata, safeCalendarInstanceId, metadata]
+  );
 
+  useEffect(() => {
     activeDateRangesEmitter.on("onSetActiveDateRanges", handler);
 
     return () => {
       activeDateRangesEmitter.off("onSetActiveDateRanges", handler);
     };
-  }, [baseMetadata, safeCalendarInstanceId, metadata]);
+  }, [handler]);
+
+  useEffect(() => {
+    activeDateRangesEmitter.on("onSetPreActiveDateRanges", handler);
+
+    return () => {
+      activeDateRangesEmitter.off("onSetPreActiveDateRanges", handler);
+    };
+  }, [handler]);
 
   return metadata;
 };

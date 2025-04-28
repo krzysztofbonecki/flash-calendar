@@ -135,6 +135,13 @@ export interface UseCalendarParams {
    * The active date ranges to highlight in the calendar.
    */
   calendarActiveDateRanges?: CalendarActiveDateRange[];
+
+  /**
+   * The active date ranges which are pre-selected to be highlighted in the
+   * calendar.
+   */
+  calendarPreActiveDateRanges?: CalendarActiveDateRange[];
+
   /**
    * The disabled date IDs. Dates in this list will be in the `disabled` state
    * unless they are part of an active range.

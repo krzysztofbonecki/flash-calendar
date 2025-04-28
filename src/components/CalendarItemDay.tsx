@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export type DayState = "idle" | "active" | "today" | "disabled";
+export type DayState = "idle" | "active" | "today" | "disabled" | "pre-active";
 
 interface DayTheme {
   container: Omit<ViewStyle, "borderRadius">;
@@ -83,6 +83,60 @@ const buildBaseStyles = (theme: BaseTheme): CalendarItemDayTheme => {
                 ...styles.baseContainer,
                 backgroundColor:
                   color ?? theme.colors.background.inverse.primary,
+              },
+              content: {
+                ...baseContent,
+                color: textColor ?? theme.colors.content.inverse.primary,
+              },
+            };
+
+      baseStyles.container.borderRadius = 0;
+      baseStyles.content.opacity = isDisabled
+        ? 0.5
+        : isDimmed
+          ? 0.7
+          : undefined;
+      if (isStartOfRange) {
+        baseStyles.container.borderTopLeftRadius = 16;
+        baseStyles.container.borderBottomLeftRadius = 16;
+      }
+      if (isEndOfRange) {
+        baseStyles.container.borderTopRightRadius = 16;
+        baseStyles.container.borderBottomRightRadius = 16;
+      }
+      if (!isStartOfRange && !isEndOfRange) {
+        baseStyles.container.borderRadius = 0;
+      }
+      return baseStyles;
+    },
+    "pre-active": ({
+      color,
+      textColor,
+      isPressed,
+      isHovered,
+      isStartOfRange,
+      isEndOfRange,
+      isDisabled,
+      isDimmed,
+    }) => {
+      const baseStyles: DayTheme & { container: ViewStyle } =
+        isPressed || isHovered
+          ? {
+              container: {
+                ...styles.baseContainer,
+                backgroundColor: theme.colors.background.tertiary,
+              },
+              content: {
+                ...baseContent,
+                color: theme.colors.content.primary,
+              },
+            }
+          : {
+              container: {
+                ...styles.baseContainer,
+                backgroundColor:
+                  color ?? theme.colors.background.inverse.primary,
+                opacity: 0.5,
               },
               content: {
                 ...baseContent,
