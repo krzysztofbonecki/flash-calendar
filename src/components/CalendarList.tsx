@@ -86,7 +86,8 @@ export interface CalendarListProps
    * - calendarRowVerticalSpacing
    * - calendarSpacing
    */
-  renderItem?: FlashListProps<CalendarMonthEnhanced>["renderItem"];
+  // renderItem?: FlashListProps<CalendarMonthEnhanced>["renderItem"];
+  CalendarItemComponent?: React.NamedExoticComponent<CalendarProps>;
 }
 
 interface ImperativeScrollParams {
@@ -156,6 +157,7 @@ export const CalendarList = memo(
       getCalendarMonthFormat,
       getCalendarWeekDayFormat,
       onCalendarDayPress,
+      CalendarItemComponent = Calendar,
       ...flatListProps
     } = otherProps;
 
@@ -352,6 +354,29 @@ export const CalendarList = memo(
       return { paddingBottom: calendarSpacing };
     }, [calendarSpacing]);
 
+    const renderItem = useCallback(
+      ({
+        item,
+      }: {
+        item: {
+          calendarProps: Omit<CalendarProps, "calendarMonthId">;
+          id: string;
+          date: Date;
+          numberOfWeeks: number;
+        };
+      }) => {
+        return (
+          <View style={calendarContainerStyle}>
+            <CalendarItemComponent
+              calendarMonthId={item.id}
+              {...item.calendarProps}
+            />
+          </View>
+        );
+      },
+      [calendarContainerStyle]
+    );
+
     return (
       <CalendarScrollComponent
         data={monthListWithCalendarProps}
@@ -361,11 +386,7 @@ export const CalendarList = memo(
         onEndReached={handleOnEndReached}
         overrideItemLayout={handleOverrideItemLayout}
         ref={flashListRef}
-        renderItem={({ item }) => (
-          <View style={calendarContainerStyle}>
-            <Calendar calendarMonthId={item.id} {...item.calendarProps} />
-          </View>
-        )}
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         {...flatListProps}
       />
