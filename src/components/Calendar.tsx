@@ -114,6 +114,11 @@ export interface CalendarProps extends UseCalendarParams {
    * The days to be dimmed.
    */
   dimmedDays?: string[];
+
+  /**
+   * Whether to always show six weeks on each month (when hideExtraDays = false)
+   */
+  showSixWeeks?: boolean;
 }
 
 const BaseCalendar = memo(function BaseCalendar(props: CalendarProps) {
