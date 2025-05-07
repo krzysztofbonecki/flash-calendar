@@ -468,4 +468,94 @@ describe("buildCalendar", () => {
       expect(january.weeksList[1]?.at(3)?.state).toBe("idle");
     });
   });
+
+  describe("showSixWeeks", () => {
+    it("shows 5 weeks when showSixWeeks is false (default)", () => {
+      const february = buildCalendar({
+        calendarMonthId: "2024-02-01", // February 2024 has 5 weeks
+        calendarFirstDayOfWeek: "sunday",
+      });
+
+      expect(february.weeksList).toHaveLength(5);
+    });
+
+    it("shows 6 weeks when showSixWeeks is true and month has 5 weeks", () => {
+      const february = buildCalendar({
+        calendarMonthId: "2024-02-01", // February 2024 has 5 weeks
+        calendarFirstDayOfWeek: "sunday",
+        showSixWeeks: true,
+      });
+
+      expect(february.weeksList).toHaveLength(6);
+
+      // Check that the extra week contains days from the next month
+      const extraWeek = february.weeksList[5];
+      expect(extraWeek).toBeDefined();
+      expect(extraWeek?.every((day) => day.isDifferentMonth)).toBe(true);
+      expect(extraWeek?.map((day) => day.id)).toEqual([
+        "2024-03-03",
+        "2024-03-04",
+        "2024-03-05",
+        "2024-03-06",
+        "2024-03-07",
+        "2024-03-08",
+        "2024-03-09",
+      ]);
+    });
+
+    it("shows 6 weeks when showSixWeeks is true and month already has 6 weeks", () => {
+      const march = buildCalendar({
+        calendarMonthId: "2024-03-01", // March 2024 has 6 weeks
+        calendarFirstDayOfWeek: "sunday",
+        showSixWeeks: true,
+      });
+
+      expect(march.weeksList).toHaveLength(6);
+    });
+
+    it("maintains correct week structure with showSixWeeks", () => {
+      const february = buildCalendar({
+        calendarMonthId: "2024-02-01",
+        calendarFirstDayOfWeek: "sunday",
+        showSixWeeks: true,
+      });
+
+      // Check that all weeks have 7 days
+      expect(february.weeksList.every((week) => week.length === 7)).toBe(true);
+
+      // Check that the extra week has correct metadata
+      const extraWeek = february.weeksList[5];
+      expect(extraWeek?.every((day) => day.isDifferentMonth)).toBe(true);
+      expect(extraWeek?.every((day) => !day.isEndOfMonth)).toBe(true);
+      expect(extraWeek?.every((day) => !day.isStartOfMonth)).toBe(true);
+
+      // Check first and last day of the extra week
+      expect(extraWeek?.[0]?.isStartOfWeek).toBe(true);
+      expect(extraWeek?.[6]?.isEndOfWeek).toBe(true);
+    });
+
+    it("works correctly with monday as first day of week", () => {
+      const february = buildCalendar({
+        calendarMonthId: "2024-02-01",
+        calendarFirstDayOfWeek: "monday",
+        showSixWeeks: true,
+      });
+
+      expect(february.weeksList).toHaveLength(6);
+
+      // Check that the extra week contains days from the next month
+      const extraWeek = february.weeksList[5];
+      expect(extraWeek).toBeDefined();
+      expect(extraWeek?.every((day) => day.isDifferentMonth)).toBe(true);
+      expect(extraWeek?.map((day) => day.id)).toEqual([
+        "2024-03-04",
+        "2024-03-05",
+        "2024-03-06",
+        "2024-03-07",
+        "2024-03-08",
+        "2024-03-09",
+        "2024-03-10",
+      ]);
+    });
+  });
 });

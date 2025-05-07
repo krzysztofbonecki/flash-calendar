@@ -167,6 +167,12 @@ export interface UseCalendarParams {
    * The days to be dimmed.
    */
   dimmedDays?: string[];
+
+  /**
+   * Whether to always show 6 weeks in the calendar, even if the month fits in fewer weeks.
+   * @defaultValue false
+   */
+  showSixWeeks?: boolean;
 }
 
 type GetStateFields = Pick<
@@ -290,6 +296,7 @@ export const buildCalendar = (params: UseCalendarParams) => {
     getCalendarMonthFormat = getBaseCalendarMonthFormat,
     getCalendarWeekDayFormat = getBaseCalendarWeekDayFormat,
     getCalendarDayFormat = getBaseCalendarDayFormat,
+    showSixWeeks = false,
   } = params;
 
   const month = fromDateId(monthId);
@@ -396,6 +403,33 @@ export const buildCalendar = (params: UseCalendarParams) => {
       return dayShape;
     })
   );
+
+  // Add an extra week if showSixWeeks is true and we have fewer than 6 weeks
+  if (showSixWeeks && weeksList.length < 6) {
+    const extraWeek: CalendarDayMetadata[] = [];
+    for (let i = 0; i < 7; i++) {
+      const id = toDateId(dayToIterate);
+      extraWeek.push({
+        date: dayToIterate,
+        displayLabel: getCalendarDayFormat(dayToIterate, calendarFormatLocale),
+        id,
+        isDifferentMonth: true,
+        isEndOfMonth: false,
+        isEndOfWeek: dayToIterate.getDay() === endOfWeekIndex,
+        isStartOfMonth: false,
+        isStartOfWeek: dayToIterate.getDay() === startOfWeekIndex,
+        isWeekend: isWeekend(dayToIterate),
+        ...getStateFields({
+          ...params,
+          todayId,
+          id,
+          date: dayToIterate,
+        }),
+      });
+      dayToIterate = addDays(dayToIterate, 1);
+    }
+    weeksList.push(extraWeek);
+  }
 
   const startOfWeekDate = startOfWeek(month, calendarFirstDayOfWeek);
   const weekDaysList = range(1, 7).map((i) =>
