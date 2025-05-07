@@ -153,6 +153,7 @@ export const CalendarList = memo(
       disabledDaysIndexes,
       restrictions,
       dimmedDays,
+      showSixWeeks,
       getCalendarDayFormat,
       getCalendarMonthFormat,
       getCalendarWeekDayFormat,
@@ -185,6 +186,7 @@ export const CalendarList = memo(
         disabledDaysIndexes,
         restrictions,
         dimmedDays,
+        showSixWeeks,
       }),
       [
         calendarColorScheme,
@@ -209,6 +211,7 @@ export const CalendarList = memo(
         disabledDaysIndexes,
         restrictions,
         dimmedDays,
+        showSixWeeks,
       ]
     );
 

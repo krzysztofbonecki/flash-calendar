@@ -11,6 +11,7 @@ export const BasicCalendarList = () => {
       calendarActiveDateRanges={[dateRange]}
       onCalendarDayPress={onCalendarDayPress}
       calendarDayHeight={48}
+      showSixWeeks
     />
   );
 };
